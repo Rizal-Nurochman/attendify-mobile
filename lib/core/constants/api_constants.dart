@@ -3,9 +3,9 @@ class ApiConstants {
 
   static const String baseUrl = 'https://attendify.lemonee.my.id';
 
-  static const String scan = '/attendance/scan';
-  static const String dailyHistory = '/attendance/daily';
-  static const String monthlyHistory = '/attendance/monthly';
+  static const String scan = '/api/attendance/scan';
+  static const String dailyHistory = '/api/attendance/daily';
+  static const String monthlyHistory = '/api/attendance/monthly';
 }
 class AppConstants {
   AppConstants._();
