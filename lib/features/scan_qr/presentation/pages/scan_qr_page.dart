@@ -8,11 +8,13 @@ import '../../../../shared/widgets/app_top_bar.dart';
 import '../bloc/scan_bloc.dart';
 import '../bloc/scan_event.dart';
 import '../bloc/scan_state.dart';
+
 class ScanQrPage extends StatefulWidget {
   const ScanQrPage({super.key});
   @override
   State<ScanQrPage> createState() => _ScanQrPageState();
 }
+
 class _ScanQrPageState extends State<ScanQrPage> {
   final MobileScannerController _cameraController = MobileScannerController();
   @override
@@ -20,6 +22,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
     _cameraController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +34,9 @@ class _ScanQrPageState extends State<ScanQrPage> {
             onDetect: (BarcodeCapture capture) {
               final barcode = capture.barcodes.firstOrNull;
               if (barcode?.rawValue != null) {
-                context
-                    .read<ScanBloc>()
-                    .add(QrCodeDetected(qrData: barcode!.rawValue!));
+                context.read<ScanBloc>().add(
+                  QrCodeDetected(qrData: barcode!.rawValue!),
+                );
               }
             },
           ),
@@ -62,17 +65,13 @@ class _ScanQrPageState extends State<ScanQrPage> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _ScanStatusSheet(),
-          ),
+          Positioned(bottom: 0, left: 0, right: 0, child: _ScanStatusSheet()),
         ],
       ),
     );
   }
 }
+
 class _ViewfinderOverlay extends StatelessWidget {
   const _ViewfinderOverlay();
   @override
@@ -85,6 +84,7 @@ class _ViewfinderOverlay extends StatelessWidget {
     );
   }
 }
+
 class _ViewfinderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -156,9 +156,11 @@ class _ViewfinderPainter extends CustomPainter {
       accentPaint,
     );
   }
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
 class _ScanStatusSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -168,9 +170,7 @@ class _ScanStatusSheet extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(AppSpacing.radiusXl),
         ),
-        border: const Border(
-          top: BorderSide(color: AppColors.outlineVariant),
-        ),
+        border: const Border(top: BorderSide(color: AppColors.outlineVariant)),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF0F172A).withValues(alpha: 0.12),
@@ -219,14 +219,20 @@ class _ScanStatusSheet extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(AppSpacing.sm),
                         decoration: BoxDecoration(
-                          color: AppColors.errorContainer.withValues(alpha: 0.5),
-                          borderRadius:
-                              BorderRadius.circular(AppSpacing.radius),
+                          color: AppColors.errorContainer.withValues(
+                            alpha: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radius,
+                          ),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.info_outline,
-                                size: 16, color: AppColors.error),
+                            const Icon(
+                              Icons.info_outline,
+                              size: 16,
+                              color: AppColors.error,
+                            ),
                             const SizedBox(width: AppSpacing.xs),
                             Expanded(
                               child: Text(
@@ -255,19 +261,26 @@ class _ScanStatusSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                    
-                    if (state is ScanSuccess && state.result.monthlyHistory.isNotEmpty)
+
+                    if (state is ScanSuccess &&
+                        state.result.monthlyHistory.isNotEmpty)
                       Container(
                         height: 200,
                         child: ListView.separated(
                           padding: const EdgeInsets.only(top: AppSpacing.sm),
                           itemCount: state.result.monthlyHistory.length,
-                          separatorBuilder: (context, index) => const Divider(height: 1),
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1),
                           itemBuilder: (context, index) {
                             final record = state.result.monthlyHistory[index];
-                            final dateStr = '${record.date.day.toString().padLeft(2, '0')}/${record.date.month.toString().padLeft(2, '0')}/${record.date.year}';
-                            final inStr = record.clockIn != null ? '${record.clockIn!.hour.toString().padLeft(2, '0')}:${record.clockIn!.minute.toString().padLeft(2, '0')}' : '--:--';
-                            final outStr = record.clockOut != null ? '${record.clockOut!.hour.toString().padLeft(2, '0')}:${record.clockOut!.minute.toString().padLeft(2, '0')}' : '--:--';
+                            final dateStr =
+                                '${record.date.day.toString().padLeft(2, '0')}/${record.date.month.toString().padLeft(2, '0')}/${record.date.year}';
+                            final inStr = record.clockIn != null
+                                ? '${record.clockIn!.hour.toString().padLeft(2, '0')}:${record.clockIn!.minute.toString().padLeft(2, '0')}'
+                                : '--:--';
+                            final outStr = record.clockOut != null
+                                ? '${record.clockOut!.hour.toString().padLeft(2, '0')}:${record.clockOut!.minute.toString().padLeft(2, '0')}'
+                                : '--:--';
                             return ListTile(
                               contentPadding: EdgeInsets.zero,
                               leading: Container(
@@ -276,37 +289,54 @@ class _ScanStatusSheet extends StatelessWidget {
                                   color: AppColors.primaryContainer,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.check_circle_outline, color: AppColors.primary, size: 20),
+                                child: const Icon(
+                                  Icons.check_circle_outline,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
                               ),
-                              title: Text(dateStr, style: AppTextStyles.labelLg),
+                              title: Text(
+                                dateStr,
+                                style: AppTextStyles.labelLg,
+                              ),
                               subtitle: Text('Masuk: $inStr - Keluar: $outStr'),
                               trailing: Text(
-                                record.durationMinutes != null && record.durationMinutes! > 0
+                                record.durationMinutes != null &&
+                                        record.durationMinutes! > 0
                                     ? '${record.durationMinutes! ~/ 60}j ${record.durationMinutes! % 60}m'
                                     : '-',
-                                style: AppTextStyles.labelMd.copyWith(fontWeight: FontWeight.bold),
+                                style: AppTextStyles.labelMd.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             );
                           },
                         ),
                       )
-                    else if (state is ScanSuccess && state.result.monthlyHistory.isEmpty)
+                    else if (state is ScanSuccess &&
+                        state.result.monthlyHistory.isEmpty)
                       Container(
                         height: 120,
                         child: Center(
                           child: Text(
                             'Belum ada riwayat absensi bulan ini.',
-                            style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
+                            style: AppTextStyles.bodyMd.copyWith(
+                              color: AppColors.onSurfaceVariant,
+                            ),
                           ),
                         ),
                       )
                     else if (state is ScanIdle || state is ScanProcessing)
                       Container(
                         height: 180,
-                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                        ),
                         child: Center(
                           child: Text(
-                            state is ScanProcessing ? 'Memproses...' : 'Arahkan kamera ke QR Code',
+                            state is ScanProcessing
+                                ? 'Memproses...'
+                                : 'Arahkan kamera ke QR Code',
                             style: AppTextStyles.bodyMd.copyWith(
                               color: AppColors.onSurfaceVariant,
                             ),
@@ -324,6 +354,7 @@ class _ScanStatusSheet extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildStatusBadge(ScanState state) {
     if (state is ScanSuccess) {
       return Container(

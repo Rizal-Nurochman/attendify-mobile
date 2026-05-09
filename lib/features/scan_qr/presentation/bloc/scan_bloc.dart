@@ -12,7 +12,7 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     QrCodeDetected event,
     Emitter<ScanState> emit,
   ) async {
-    if (state is ScanProcessing) return;
+    if (state is ScanProcessing || state is ScanSuccess || state is ScanFailureState) return;
     emit(const ScanProcessing());
     final result = await submitAttendance(qrData: event.qrData);
     result.fold(
