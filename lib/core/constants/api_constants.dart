@@ -1,7 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://10.0.2.2:3000/api';
+  static const String baseUrl = 'https://attendify.lemonee.my.id';
 
   static const String scan = '/attendance/scan';
   static const String dailyHistory = '/attendance/daily';
